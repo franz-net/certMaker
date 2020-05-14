@@ -6,7 +6,9 @@
   <a href="https://github.com/franz-net/certMaker/blob/master/LICENSE">
     <img alt="GPL3" src="https://img.shields.io/github/license/franz-net/certMaker">
   </a>
-  <img alt="build status" src="https://travis-ci.org/franz-net/certMaker.svg?branch=master">
+  <a href="https://travis-ci.org/github/franz-net/certMaker">
+    <img alt="build status" src="https://travis-ci.org/franz-net/certMaker.svg?branch=master">
+  </a>  
 </p>
 
 Project created with the goal of making self-signed certificate creation and management easy. Empowers users with a single executable to create and store CA certificates, private keys and sign new device certificates.
