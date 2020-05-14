@@ -22,8 +22,12 @@ It is written entirely in Golang and uses sqlite to store pem encoded Certificat
 
 ### Create and Sign Certificate
 
+### Features
+* The "silent" mode uses the "flag" package
+* The "wizard" mode uses the <a href="https://github.com/manifoldco/promptui">promptui</a> package
+
 ## Features in the works
-* Separate CLI experience using <a href="https://github.com/manifoldco/promptui">promptui</a>
 * Encrypt SQLite DB to enhance security for storing Certificates and Keys
 * Potentially add a web version of the application
 * Add querying for past Certificates or CA's
+* Add tests

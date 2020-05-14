@@ -22,6 +22,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/manifoldco/promptui"
+
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -332,47 +334,194 @@ func readFlags() (Cert, string) {
 	return certObj, certType
 }
 
+func loadPromptui() (Cert, string) {
+
+	var certObj Cert
+	var certType string
+
+	prompt := promptui.Select{
+		Label: "Select Certificate Type",
+		Items: []string{"CaCert", "SignedCert"},
+	}
+
+	_, certType, err := prompt.Run()
+
+	if err != nil {
+		fmt.Println("ERROR: Prompt failed", err)
+		os.Exit(1)
+	}
+
+	if certType == "CaCert" {
+		// prompt for CA stuff
+		id_prompt := promptui.Prompt{
+			Label: "Provide CA Id or Name to identify",
+		}
+		caID, _ := id_prompt.Run()
+
+		org_prompt := promptui.Prompt{
+			Label: "Provide CA Organization Name",
+		}
+		caOrg, _ := org_prompt.Run()
+
+		co_prompt := promptui.Prompt{
+			Label: "Provide CA Country (2 letter)",
+		}
+		caCountry, _ := co_prompt.Run()
+
+		province_prompt := promptui.Prompt{
+			Label: "Provide CA Province Name",
+		}
+		caProvince, _ := province_prompt.Run()
+
+		locality_prompt := promptui.Prompt{
+			Label: "Provide CA Locality Name",
+		}
+		caLocality, _ := locality_prompt.Run()
+
+		address_prompt := promptui.Prompt{
+			Label: "Provide CA Address",
+		}
+		caStreetAdress, _ := address_prompt.Run()
+
+		zip_prompt := promptui.Prompt{
+			Label: "Provide CA Zip Code",
+		}
+		caPostalCode, _ := zip_prompt.Run()
+
+		certObj := Cert{
+			ID:            caID,
+			Organization:  []string{caOrg},
+			Country:       []string{caCountry},
+			Province:      []string{caProvince},
+			Locality:      []string{caLocality},
+			StreetAddress: []string{caStreetAdress},
+			PostalCode:    []string{caPostalCode},
+		}
+
+		return certObj, "ca"
+
+	} else if certType == "SignedCert" {
+		// prompt for device stuff
+		sid_prompt := promptui.Prompt{
+			Label: "Provide Id or Name to identify the Signed Certificate",
+		}
+		sID, _ := sid_prompt.Run()
+
+		id_prompt := promptui.Prompt{
+			Label: "Provide the CA Id to sign the Certificate against",
+		}
+		scaID, _ := id_prompt.Run()
+
+		org_prompt := promptui.Prompt{
+			Label: "Provide CA Organization Name",
+		}
+		sOrg, _ := org_prompt.Run()
+
+		co_prompt := promptui.Prompt{
+			Label: "Provide CA Country (2 letter)",
+		}
+		sCountry, _ := co_prompt.Run()
+
+		province_prompt := promptui.Prompt{
+			Label: "Provide CA Province Name",
+		}
+		sProvince, _ := province_prompt.Run()
+
+		locality_prompt := promptui.Prompt{
+			Label: "Provide CA Locality Name",
+		}
+		sLocality, _ := locality_prompt.Run()
+
+		address_prompt := promptui.Prompt{
+			Label: "Provide CA Address",
+		}
+		sStreetAdress, _ := address_prompt.Run()
+
+		zip_prompt := promptui.Prompt{
+			Label: "Provide CA Zip Code",
+		}
+		sPostalCode, _ := zip_prompt.Run()
+
+		common_name_prompt := promptui.Prompt{
+			Label: "Provide common name (hostname, web address or IP) to associate with the Certificate",
+		}
+		sCommonName, _ := common_name_prompt.Run()
+
+		sanIP_prompt := promptui.Prompt{
+			Label: "Provide IPv4 alternative address (i.e 127.0.0.1) to associate with the Certificate",
+		}
+		sAltSubjectIP, _ := sanIP_prompt.Run()
+
+		sanDNS_prompt := promptui.Prompt{
+			Label: "Provide alternative hostnames or web address (i.e localhost) to associate with the Certificate",
+		}
+		sAltSubjectName, _ := sanDNS_prompt.Run()
+
+		certObj := Cert{
+			ID:            sID,
+			CAID:          scaID,
+			Organization:  []string{sOrg},
+			Country:       []string{sCountry},
+			Province:      []string{sProvince},
+			Locality:      []string{sLocality},
+			StreetAddress: []string{sStreetAdress},
+			PostalCode:    []string{sPostalCode},
+			CommonName:    sCommonName,
+			IPAddresses:   []net.IP{net.ParseIP(sAltSubjectIP)},
+			DNSNames:      []string{sAltSubjectName},
+		}
+
+		return certObj, "cert"
+	}
+	return certObj, certType
+}
+
 func main() {
 
+	var certInfo Cert
+	var certType string
+
 	if len(os.Args) > 1 {
-		certInfo, certType := readFlags()
+		certInfo, certType = readFlags()
+	} else {
+		certInfo, certType = loadPromptui()
+	}
 
-		if certType == "ca" {
-			fmt.Println("Generating CA...")
-			// generate ca key
-			caKeyBin := genPrivateKey()
-			// generate cert definition
-			caCertDef := genCaCertDef(certInfo)
-			// generate ca cert and return it
-			caCertBin := genCA(caKeyBin, caCertDef)
-			// pem encode the cacert and return it
-			caPemCert, caPemKey := encodeCertKey(caKeyBin, caCertBin)
-			// Write the cert to file
-			writeCertKey(caPemKey, caPemCert, "ca")
-			// create struct
-			certData := DbCert{
-				ID:      certInfo.ID,
-				PEMKEY:  *caPemKey,
-				PEMCERT: *caPemCert,
-			}
-			// Save CA in db
-			writeToDb(certData, "ca")
+	if certType == "ca" {
+		fmt.Println("Generating CA...")
+		// generate ca key
+		caKeyBin := genPrivateKey()
+		// generate cert definition
+		caCertDef := genCaCertDef(certInfo)
+		// generate ca cert and return it
+		caCertBin := genCA(caKeyBin, caCertDef)
+		// pem encode the cacert and return it
+		caPemCert, caPemKey := encodeCertKey(caKeyBin, caCertBin)
+		// Write the cert to file
+		writeCertKey(caPemKey, caPemCert, "ca")
+		// create struct
+		certData := DbCert{
+			ID:      certInfo.ID,
+			PEMKEY:  *caPemKey,
+			PEMCERT: *caPemCert,
 		}
+		// Save CA in db
+		writeToDb(certData, "ca")
+	}
 
-		if certType == "cert" {
-			fmt.Println("Generating signed Cert...")
-			// retrieve ca information
-			caKeyBin, caCertBin, caCertDef := getCA(certInfo.ID)
-			// generate server cert key
-			sKeyBin := genPrivateKey()
-			// generate cert definition
-			sCertDef := genSCertDef(certInfo)
-			// Sign cert with CA
-			sCertBin := signCert(caKeyBin, caCertBin, sKeyBin, sCertDef, caCertDef)
-			// pem encode the scert and return it
-			sPemCert, sPemKey := encodeCertKey(sKeyBin, sCertBin)
-			// write the cert to file
-			writeCertKey(sPemKey, sPemCert, "")
-		}
+	if certType == "cert" {
+		fmt.Println("Generating signed Cert...")
+		// retrieve ca information
+		caKeyBin, caCertBin, caCertDef := getCA(certInfo.CAID)
+		// generate server cert key
+		sKeyBin := genPrivateKey()
+		// generate cert definition
+		sCertDef := genSCertDef(certInfo)
+		// Sign cert with CA
+		sCertBin := signCert(caKeyBin, caCertBin, sKeyBin, sCertDef, caCertDef)
+		// pem encode the scert and return it
+		sPemCert, sPemKey := encodeCertKey(sKeyBin, sCertBin)
+		// write the cert to file
+		writeCertKey(sPemKey, sPemCert, "")
 	}
 }
