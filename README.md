@@ -19,9 +19,21 @@ It is written entirely in Golang and uses sqlite to store pem encoded Certificat
 
 ## Installation
 
-## Docs
+
+## Usage
 
 ### Create CA
+
+#### **Silent Mode**
+
+  * `-ca-address string`: Certificate Authority Street Address (default "101 Market St")
+  * `-ca-country string`: Certificate Authority Country (2 letter) (default "US")
+  * `-ca-identifier string`: Internal Identifier for the CA (Required to create a CA or sign a Cert)
+  * `-ca-locality string`: Certificate Authoritiy Locality (default "San Francisco")
+  * `-ca-organization string`: Certificate Authority Name (default "Example, Inc")
+  * `-ca-province string`: Certificate Authority Province (2 letter) (default "CA")
+  * `-ca-zipcode string`: Certificate Authority Zip Code (default "94016")
+
 
 ### Create and Sign Certificate
 
