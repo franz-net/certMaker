@@ -413,32 +413,32 @@ func loadPromptui() (Cert, string) {
 		scaID, _ := id_prompt.Run()
 
 		org_prompt := promptui.Prompt{
-			Label: "Provide CA Organization Name",
+			Label: "Provide Organization for Certificate",
 		}
 		sOrg, _ := org_prompt.Run()
 
 		co_prompt := promptui.Prompt{
-			Label: "Provide CA Country (2 letter)",
+			Label: "Provide Country for Certificate (2 letter)",
 		}
 		sCountry, _ := co_prompt.Run()
 
 		province_prompt := promptui.Prompt{
-			Label: "Provide CA Province Name",
+			Label: "Provide Province for Certificate",
 		}
 		sProvince, _ := province_prompt.Run()
 
 		locality_prompt := promptui.Prompt{
-			Label: "Provide CA Locality Name",
+			Label: "Provide Locality Name for Certificate",
 		}
 		sLocality, _ := locality_prompt.Run()
 
 		address_prompt := promptui.Prompt{
-			Label: "Provide CA Address",
+			Label: "Provide Address for Certificate",
 		}
 		sStreetAdress, _ := address_prompt.Run()
 
 		zip_prompt := promptui.Prompt{
-			Label: "Provide CA Zip Code",
+			Label: "Provide Zip Code for Certificate",
 		}
 		sPostalCode, _ := zip_prompt.Run()
 
