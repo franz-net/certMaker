@@ -15,10 +15,13 @@ Project created with the goal of making self-signed certificate creation and man
 
 It is written entirely in Golang and uses sqlite to store pem encoded Certificates and PK's
 
-## Under Construction....
+## Installation (Building the code)
 
-## Installation
-
+To build and run the program you need: 
+* [Golang installed](https://golang.org/doc/install) and [GOPATH configured](https://golang.org/doc/gopath_code.html)
+* Install [SQLite](https://github.com/mattn/go-sqlite3#installation) and [promptui](https://github.com/manifoldco/promptui) packages
+* Clone this repository
+* Build the code with `go build certMaker.go`
 
 ## Usage
 
@@ -64,7 +67,8 @@ The resulting certificates and keys are generated in the same location where Cer
 * The "wizard" mode uses the <a href="https://github.com/manifoldco/promptui">promptui</a> package
 * Certificates can be verified using OpenSSL
 
-## Features in the works
+## Nice to haves
+I'll be working in adding these features:
 * Encrypt SQLite DB to enhance security for storing Certificates and Keys
 * Potentially add a web version of the application
 * Add querying for past Certificates or CA's
