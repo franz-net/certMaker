@@ -21,7 +21,21 @@ To build and run the program you need:
 * [Golang installed](https://golang.org/doc/install) and [GOPATH configured](https://golang.org/doc/gopath_code.html)
 * Install [SQLite](https://github.com/mattn/go-sqlite3#installation) and [promptui](https://github.com/manifoldco/promptui) packages
 * Clone this repository
-* Build the code with `go build certMaker.go`
+* Build the code with `go build...`
+
+ Example of build for linux x86_64: `env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o certMaker certMaker.go`
+
+## Pre-compiled Binaries
+
+To use:
+* Download the certMaker executable
+* Grant execute permissions `chmod +x certMaker`
+* Add to $PATH if necessary
+* Run certMaker `./certMaker`
+
+### Releases
+* [Version 1.0](https://github.com/franz-net/certMaker/releases/tag/release%2Fv1.0)
+
 
 ## Usage
 
