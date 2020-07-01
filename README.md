@@ -6,7 +6,7 @@
   <a href="https://github.com/franz-net/certMaker/blob/master/LICENSE">
     <img alt="GPL3" src="https://img.shields.io/github/license/franz-net/certMaker">
   </a>
-  <a href="https://goreportcard.com/badge/github.com/franz-net/certMaker">
+  <a href="https://goreportcard.com/report/github.com/franz-net/certMaker">
    <img alt="Go Report Card" src="https://goreportcard.com/badge/github.com/franz-net/certMaker">
   </a>
   <a href="https://travis-ci.org/github/franz-net/certMaker">
