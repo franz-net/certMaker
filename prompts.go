@@ -27,35 +27,35 @@ func loadPromptui() (Cert, string) {
 
 	if certType == "CaCert" {
 		// prompt for CA stuff
-		org_prompt := promptui.Prompt{
+		orgPrompt := promptui.Prompt{
 			Label: "Provide CA Organization Name",
 		}
-		caOrg, _ := org_prompt.Run()
+		caOrg, _ := orgPrompt.Run()
 
-		co_prompt := promptui.Prompt{
+		coPrompt := promptui.Prompt{
 			Label: "Provide CA Country (2 letter)",
 		}
-		caCountry, _ := co_prompt.Run()
+		caCountry, _ := coPrompt.Run()
 
-		province_prompt := promptui.Prompt{
+		provincePrompt := promptui.Prompt{
 			Label: "Provide CA Province Name",
 		}
-		caProvince, _ := province_prompt.Run()
+		caProvince, _ := provincePrompt.Run()
 
-		locality_prompt := promptui.Prompt{
+		localityPrompt := promptui.Prompt{
 			Label: "Provide CA Locality Name",
 		}
-		caLocality, _ := locality_prompt.Run()
+		caLocality, _ := localityPrompt.Run()
 
-		address_prompt := promptui.Prompt{
+		addressPrompt := promptui.Prompt{
 			Label: "Provide CA Address",
 		}
-		caStreetAdress, _ := address_prompt.Run()
+		caStreetAdress, _ := addressPrompt.Run()
 
-		zip_prompt := promptui.Prompt{
+		zipPrompt := promptui.Prompt{
 			Label: "Provide CA Zip Code",
 		}
-		caPostalCode, _ := zip_prompt.Run()
+		caPostalCode, _ := zipPrompt.Run()
 
 		certObj := Cert{
 			Organization:  []string{caOrg},
@@ -71,50 +71,50 @@ func loadPromptui() (Cert, string) {
 	} else if certType == "SignedCert" {
 		// prompt for device stuff
 
-		org_prompt := promptui.Prompt{
+		orgPrompt := promptui.Prompt{
 			Label: "Provide Organization for Certificate",
 		}
-		sOrg, _ := org_prompt.Run()
+		sOrg, _ := orgPrompt.Run()
 
-		co_prompt := promptui.Prompt{
+		coPrompt := promptui.Prompt{
 			Label: "Provide Country for Certificate (2 letter)",
 		}
-		sCountry, _ := co_prompt.Run()
+		sCountry, _ := coPrompt.Run()
 
-		province_prompt := promptui.Prompt{
+		provincePrompt := promptui.Prompt{
 			Label: "Provide Province for Certificate",
 		}
-		sProvince, _ := province_prompt.Run()
+		sProvince, _ := provincePrompt.Run()
 
-		locality_prompt := promptui.Prompt{
+		localityPrompt := promptui.Prompt{
 			Label: "Provide Locality Name for Certificate",
 		}
-		sLocality, _ := locality_prompt.Run()
+		sLocality, _ := localityPrompt.Run()
 
-		address_prompt := promptui.Prompt{
+		addressPrompt := promptui.Prompt{
 			Label: "Provide Address for Certificate",
 		}
-		sStreetAdress, _ := address_prompt.Run()
+		sStreetAdress, _ := addressPrompt.Run()
 
-		zip_prompt := promptui.Prompt{
+		zipPrompt := promptui.Prompt{
 			Label: "Provide Zip Code for Certificate",
 		}
-		sPostalCode, _ := zip_prompt.Run()
+		sPostalCode, _ := zipPrompt.Run()
 
-		common_name_prompt := promptui.Prompt{
+		commonNamePrompt := promptui.Prompt{
 			Label: "Provide common name (hostname, web address or IP) to associate with the Certificate",
 		}
-		sCommonName, _ := common_name_prompt.Run()
+		sCommonName, _ := commonNamePrompt.Run()
 
-		sanIP_prompt := promptui.Prompt{
+		sanIPPrompt := promptui.Prompt{
 			Label: "Provide IPv4 alternative address (i.e 127.0.0.1) to associate with the Certificate",
 		}
-		sAltSubjectIP, _ := sanIP_prompt.Run()
+		sAltSubjectIP, _ := sanIPPrompt.Run()
 
-		sanDNS_prompt := promptui.Prompt{
+		sanDNSPrompt := promptui.Prompt{
 			Label: "Provide alternative hostnames or web address (i.e localhost) to associate with the Certificate",
 		}
-		sAltSubjectName, _ := sanDNS_prompt.Run()
+		sAltSubjectName, _ := sanDNSPrompt.Run()
 
 		certObj := Cert{
 			Organization:  []string{sOrg},
