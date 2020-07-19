@@ -5,7 +5,6 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"crypto/x509/pkix"
-	"encoding/pem"
 	"math/big"
 	"time"
 )
@@ -42,23 +41,4 @@ func genCaCertDef(certInfo Cert) *x509.Certificate {
 	}
 
 	return caDef
-}
-
-func getCA() (*rsa.PrivateKey, []byte, *x509.Certificate) {
-	// NEED TO MODIFY THIS TO LOAD A CA FROM FILE
-	var pemKey string
-	var pemCert string
-
-	keyBlock, _ := pem.Decode([]byte(pemKey))
-	var parsedCaKey interface{}
-	parsedCaKey, err := x509.ParsePKCS1PrivateKey(keyBlock.Bytes)
-	if err != nil {
-		panic(err.Error())
-	}
-	caKeyBin, _ := parsedCaKey.(*rsa.PrivateKey)
-	caCertBlock, _ := pem.Decode([]byte(pemCert))
-	caCertDef, _ := x509.ParseCertificate(caCertBlock.Bytes)
-	caCertBin := caCertBlock.Bytes
-
-	return caKeyBin, caCertBin, caCertDef
 }

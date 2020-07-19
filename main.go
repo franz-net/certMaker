@@ -25,45 +25,56 @@ type Cert struct {
 	DNSNames      []string
 }
 
+func ca(certInfo Cert, outputPath string) {
+	fmt.Println("Generating CA...")
+	// generate ca key
+	caKeyBin := genPrivateKey()
+	// generate cert definition
+	caCertDef := genCaCertDef(certInfo)
+	// generate ca cert and return it
+	caCertBin := genCA(caKeyBin, caCertDef)
+	// pem encode the cacert and return it
+	caPemCert, caPemKey := encodeCertKey(caKeyBin, caCertBin)
+	// Write the cert to file
+	writeCertKey(caPemKey, caPemCert, "ca", outputPath)
+	// create struct
+}
+
+func cert(certInfo Cert, outputPath string, caPath string, caKeyPath string) {
+	fmt.Println("Generating signed Cert...")
+	// retrieve ca information
+	caKeyBin, caCertBin, caCertDef := getCA(caPath, caKeyPath)
+	// generate server cert key
+	sKeyBin := genPrivateKey()
+	// generate cert definition
+	sCertDef := genSCertDef(certInfo)
+	// Sign cert with CA
+	sCertBin := signCert(caKeyBin, caCertBin, sKeyBin, sCertDef, caCertDef)
+	// pem encode the scert and return it
+	sPemCert, sPemKey := encodeCertKey(sKeyBin, sCertBin)
+	// write the cert to file
+	writeCertKey(sPemKey, sPemCert, "", outputPath)
+}
+
 func main() {
 
-	var certInfo Cert
-	var certType string
-
 	if len(os.Args) > 1 {
-		certInfo, certType = readFlags()
+		//certInfo, certType := readFlags()
+		// WILL ADD CLI FLAGS HERE EVENTUALLY
 	} else {
-		certInfo, certType = loadPromptui()
-	}
+		certType := initPrompt()
+		if certType == "ca" {
+			outputPath, _, _ := loadPaths(certType)
+			certInfo := caPrompt()
 
-	if certType == "ca" {
-		fmt.Println("Generating CA...")
-		// generate ca key
-		caKeyBin := genPrivateKey()
-		// generate cert definition
-		caCertDef := genCaCertDef(certInfo)
-		// generate ca cert and return it
-		caCertBin := genCA(caKeyBin, caCertDef)
-		// pem encode the cacert and return it
-		caPemCert, caPemKey := encodeCertKey(caKeyBin, caCertBin)
-		// Write the cert to file
-		writeCertKey(caPemKey, caPemCert, "ca")
-		// create struct
-	}
+			ca(certInfo, outputPath)
 
-	if certType == "cert" {
-		fmt.Println("Generating signed Cert...")
-		// retrieve ca information
-		caKeyBin, caCertBin, caCertDef := getCA()
-		// generate server cert key
-		sKeyBin := genPrivateKey()
-		// generate cert definition
-		sCertDef := genSCertDef(certInfo)
-		// Sign cert with CA
-		sCertBin := signCert(caKeyBin, caCertBin, sKeyBin, sCertDef, caCertDef)
-		// pem encode the scert and return it
-		sPemCert, sPemKey := encodeCertKey(sKeyBin, sCertBin)
-		// write the cert to file
-		writeCertKey(sPemKey, sPemCert, "")
+		} else if certType == "cert" {
+			outputPath, caPath, caKeyPath := loadPaths(certType)
+			certInfo := certPrompt()
+
+			cert(certInfo, outputPath, caPath, caKeyPath)
+		}
+
 	}
 }
