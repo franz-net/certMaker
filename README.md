@@ -39,7 +39,6 @@ To use:
 ### Releases
 * [Version 1.0](https://github.com/franz-net/certMaker/releases/tag/release%2Fv1.0)
 
-
 ## Usage
 
 After building or downloading one of the pre-compiled binaries, run `certMaker` and respond to the prompts
@@ -87,3 +86,4 @@ The resulting certificates and keys are generated in the path provided
 * Database to store CAs, Key's and Certs
 * Webapp to manage the certificates
 * Add tests
+* Add silent mode to facilitate automation
