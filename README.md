@@ -14,9 +14,9 @@
   </a>  
 </p>
 
-Project created with the goal of making self-signed certificate creation and management easy. Empowers users with a single executable to create and store CA certificates, private keys and sign new device certificates.
+Project created with the goal of helping me learn how to write Go code and making self-signed certificate creation.
+Empowers users with a single executable to create and store CA certificates, private keys and sign new device certificates.
 
-It is written entirely in Golang and uses sqlite to store pem encoded Certificates and PK's
 
 ## Installation (Building the code)
 
