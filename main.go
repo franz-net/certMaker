@@ -25,19 +25,28 @@ type Cert struct {
 	DNSNames      []string
 }
 
-func ca(certInfo Cert, outputPath string) {
+func ca(caInfo Cert, outputPath, caName string) {
 	fmt.Println("Generating CA...")
 	// generate ca key
 	caKeyBin := genPrivateKey()
 	// generate cert definition
-	caCertDef := genCaCertDef(certInfo)
+	caCertDef := genCaCertDef(caInfo)
 	// generate ca cert and return it
 	caCertBin := genCA(caKeyBin, caCertDef)
 	// pem encode the cacert and return it
 	caPemCert, caPemKey := encodeCertKey(caKeyBin, caCertBin)
 	// Write the cert to file
-	writeCertKey(caPemKey, caPemCert, "ca", outputPath)
-	// create struct
+	caPath, caKeyPath := writeCertKey(caPemKey, caPemCert, "ca", outputPath, caName)
+	// Return the path to the keys
+	fmt.Println("Ca can be found: " + caPath + "\nKey can be found: " + caKeyPath + "/nKeep the key safe!")
+	// ask if the user wants to create a cert based on the CA
+	for {
+		if !continueToCertPrompt() {
+			break
+		}
+		certInfo := certPrompt()
+		cert(certInfo, outputPath, caPath, caKeyPath)
+	}
 }
 
 func cert(certInfo Cert, outputPath string, caPath string, caKeyPath string) {
@@ -53,7 +62,9 @@ func cert(certInfo Cert, outputPath string, caPath string, caKeyPath string) {
 	// pem encode the scert and return it
 	sPemCert, sPemKey := encodeCertKey(sKeyBin, sCertBin)
 	// write the cert to file
-	writeCertKey(sPemKey, sPemCert, "", outputPath)
+	certPath, keyPath := writeCertKey(sPemKey, sPemCert, "", outputPath, certInfo.CommonName)
+	// Return paths to the user
+	fmt.Println("Cert can be found: " + certPath + "\nKey can be found: " + keyPath)
 }
 
 func main() {
@@ -64,10 +75,10 @@ func main() {
 	} else {
 		certType := initPrompt()
 		if certType == "ca" {
-			outputPath, _, _ := loadPaths(certType)
+			outputPath, caName, _ := loadPaths(certType)
 			certInfo := caPrompt()
 
-			ca(certInfo, outputPath)
+			ca(certInfo, outputPath, caName)
 
 		} else if certType == "cert" {
 			outputPath, caPath, caKeyPath := loadPaths(certType)
@@ -75,6 +86,5 @@ func main() {
 
 			cert(certInfo, outputPath, caPath, caKeyPath)
 		}
-
 	}
 }

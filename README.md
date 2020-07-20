@@ -22,7 +22,7 @@ It is written entirely in Golang and uses sqlite to store pem encoded Certificat
 
 To build and run the program you need: 
 * [Golang installed](https://golang.org/doc/install) and [GOPATH configured](https://golang.org/doc/gopath_code.html)
-* Install [SQLite](https://github.com/mattn/go-sqlite3#installation) and [promptui](https://github.com/manifoldco/promptui) packages
+* Install [promptui](https://github.com/manifoldco/promptui) packages
 * Clone this repository
 * Build the code with `go build...`
 
@@ -42,8 +42,8 @@ To use:
 
 ## Usage
 
-CertMaker can be used in silent mode by passing all attributes via command line or responding to prompts by not passing any arguments at all.
-The resulting certificates and keys are generated in the same location where CertMaker is being run
+After building or downloading one of the pre-compiled binaries, run `certMaker` and respond to the prompts
+The resulting certificates and keys are generated in the path provided
 
 ### Create CA
 
@@ -80,13 +80,10 @@ The resulting certificates and keys are generated in the same location where Cer
 ![](S_Prompts.gif)
 
 ### Features
-* The "silent" mode uses the "flag" package
 * The "wizard" mode uses the <a href="https://github.com/manifoldco/promptui">promptui</a> package
-* Certificates can be verified using OpenSSL
+* Certificates can be verified using OpenSSL ```openssl verify -verbose -CAfile cacert.pem  server.crt```
 
-## Nice to haves
-I'll be working in adding these features:
-* Encrypt SQLite DB to enhance security for storing Certificates and Keys
-* Potentially add a web version of the application
-* Add querying for past Certificates or CA's
+## Wishlist
+* Database to store CAs, Key's and Certs
+* Webapp to manage the certificates
 * Add tests

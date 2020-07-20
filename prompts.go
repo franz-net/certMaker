@@ -9,11 +9,16 @@ import (
 func initPrompt() string {
 	prompt := promptui.Select{
 		Label: "Select Certificate Type",
-		Items: []string{"CaCert", "SignedCert"},
+		Items: []string{"Ca", "Certificate"},
 	}
 	_, certType, _ := prompt.Run()
 
-	return certType
+	if certType == "Ca" {
+		return "ca"
+	} else if certType == "Certificate" {
+		return "cert"
+	}
+	return ""
 }
 
 func loadPaths(certType string) (string, string, string) {
@@ -25,7 +30,12 @@ func loadPaths(certType string) (string, string, string) {
 		outputPath, _ := destinationPrompt.Run()
 		checkForPath(outputPath)
 
-		return outputPath, "", ""
+		caNamePrompt := promptui.Prompt{
+			Label: "Provide a name for the CA (this will be the filename)",
+		}
+		caName, _ := caNamePrompt.Run()
+
+		return outputPath, caName, ""
 
 	} else if certType == "cert" {
 		destinationPrompt := promptui.Prompt{
@@ -94,6 +104,20 @@ func caPrompt() Cert {
 	}
 
 	return caCertObj
+}
+
+func continueToCertPrompt() bool {
+	prompt := promptui.Select{
+		Label: "Continue creating a certificate from the CA just created?",
+		Items: []string{"Yes", "No"},
+	}
+	_, continueCert, _ := prompt.Run()
+
+	if continueCert == "Yes" {
+		return true
+	}
+
+	return false
 }
 
 func certPrompt() Cert {

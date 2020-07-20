@@ -17,10 +17,10 @@ func checkForPath(path string) {
 		fmt.Println("Error, output path not found")
 		os.Exit(1)
 	}
-	if !os.IsPermission(err) {
-		fmt.Println("Error, output path is not writable")
-		os.Exit(1)
-	}
+	//if !os.IsPermission(err) {
+	//	fmt.Println("Error, output path is not writable")
+	//	os.Exit(1)
+	//}
 
 }
 
@@ -40,20 +40,22 @@ func encodeCertKey(key *rsa.PrivateKey, cert []byte) (*bytes.Buffer, *bytes.Buff
 	return pemCert, pemKey
 }
 
-func writeCertKey(key *bytes.Buffer, cert *bytes.Buffer, certType string, outputPath string) {
+func writeCertKey(key *bytes.Buffer, cert *bytes.Buffer, certType, outputPath, certName string) (string, string) {
 	certPath := ""
 	keyPath := ""
 
 	if certType == "ca" {
-		certPath = outputPath + "/caCert.pem"
-		keyPath = outputPath + "/caKey.pem"
+		certPath = outputPath + "/caCert" + certName + ".pem"
+		keyPath = outputPath + "/caKey" + certName + ".pem"
 	} else {
-		certPath = outputPath + "/sCert.pem"
-		keyPath = outputPath + "/sKey.pem"
+		certPath = outputPath + "/sCert" + certName + ".pem"
+		keyPath = outputPath + "/sKey" + certName + ".pem"
 	}
 
 	_ = ioutil.WriteFile(keyPath, key.Bytes(), 0775)
 	_ = ioutil.WriteFile(certPath, cert.Bytes(), 0775)
+
+	return certPath, keyPath
 }
 
 func getCA(inputCA, inputCaKey string) (*rsa.PrivateKey, []byte, *x509.Certificate) {
